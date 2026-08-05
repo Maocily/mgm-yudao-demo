@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 二维码手机占位图：phone + QR pattern + scan line -->
+  <defs>
+    <linearGradient id="phoneBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3d6"/>
+      <stop offset="100%" stop-color="#f3e0ad"/>
+    </linearGradient>
+  </defs>
+  <rect x="58" y="22" width="84" height="156" rx="14" fill="url(#phoneBg)" stroke="#c9a24d" stroke-width="2"/>
+  <rect x="68" y="38" width="64" height="108" fill="#ffffff" stroke="#c9a24d" stroke-width="1"/>
+  <rect x="74" y="46" width="14" height="14" fill="none" stroke="#2a2118" stroke-width="2"/>
+  <rect x="112" y="46" width="14" height="14" fill="none" stroke="#2a2118" stroke-width="2"/>
+  <rect x="74" y="84" width="14" height="14" fill="none" stroke="#2a2118" stroke-width="2"/>
+  <line x1="68" y1="92" x2="132" y2="92" stroke="#9e1b2a" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="100" y="178" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8a650f" opacity="0.6">PLACEHOLDER</text>
+</svg>

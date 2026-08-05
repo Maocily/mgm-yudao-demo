@@ -1,0 +1,54 @@
+name: build-windows
+
+# 手动触发，或推 main 时自动跑（可按需删掉 push 块）
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'kiosk-terminal/**'
+      - '.github/workflows/build-windows.yml'
+
+jobs:
+  build:
+    name: Build Windows .exe
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: kiosk-terminal
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: kiosk-terminal/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check & build renderer + electron
+        run: npm run build
+
+      - name: Package Windows installer (NSIS) + portable
+        run: npx electron-builder --win --x64 --publish never
+
+      - name: Upload installer (.exe)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiosk-setup
+          path: kiosk-terminal/release/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload portable (win-unpacked)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiosk-portable
+          path: kiosk-terminal/release/win-unpacked
+          if-no-files-found: error
+          retention-days: 14

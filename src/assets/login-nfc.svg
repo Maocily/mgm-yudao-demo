@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- NFC 感应占位图：phone + NFC wave -->
+  <defs>
+    <linearGradient id="nfcBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3d6"/>
+      <stop offset="100%" stop-color="#f3e0ad"/>
+    </linearGradient>
+  </defs>
+  <rect x="62" y="32" width="76" height="148" rx="14" fill="url(#nfcBg)" stroke="#c9a24d" stroke-width="2"/>
+  <rect x="72" y="48" width="56" height="100" fill="#ffffff" stroke="#c9a24d" stroke-width="1"/>
+  <path d="M 80 110 Q 100 86 120 110" fill="none" stroke="#2a2118" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M 86 116 Q 100 100 114 116" fill="none" stroke="#2a2118" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="100" cy="124" r="3" fill="#2a2118"/>
+  <text x="100" y="178" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8a650f" opacity="0.6">PLACEHOLDER</text>
+</svg>

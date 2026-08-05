@@ -1,0 +1,283 @@
+/* =========================================================
+   MGM Kiosk 设计 token —— 从设计稿 Kiosk_zh.pen 统计得出
+   ========================================================= */
+:root {
+  /* 品牌色 */
+  --gold: #c9a24d; /* 金色分隔/高亮 */
+  --gold-deep: #8a650f; /* 深金：图标/装饰角 */
+  --ink: #2a2118; /* 主文字（深棕黑） */
+  --ink-soft: #7a6546; /* 次文字（棕） */
+  --cream: #fbf8f1; /* 页面米白背景 */
+  --cream-2: #efe5cf; /* 次级米色 */
+  --cream-3: #fff8ea; /* 卡片浅金底 */
+  --red: #9e1b2a; /* 强调红（点缀/危险） */
+  --white: #ffffff;
+
+  /* 状态色 */
+  --success: #2e7d32;
+  --success-bg: #e6f4ea;
+  --warning: #b8860b;
+  --warning-bg: #fdf3d8;
+  --danger: #9e1b2a;
+  --danger-bg: #fbe9eb;
+  --online: #2e7d32;
+
+  /* 圆角 */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* 阴影 */
+  --shadow-card: 0 8px 32px rgba(26, 17, 8, 0.08);
+  --shadow-modal: 0 24px 80px rgba(26, 17, 8, 0.28);
+
+  /* 字体 */
+  --font-cn: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-en: 'Inter', 'Noto Sans SC', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-cn);
+  color: var(--ink);
+  background: #000;
+  cursor: none; /* 触摸屏隐藏鼠标指针；调试可注释 */
+}
+
+/* 竖屏 1080×1820 舞台，等比缩放居中 */
+.kiosk-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1080px;
+  height: 1820px;
+  transform-origin: center center;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* 通用装饰角 */
+.deco-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.deco-corner {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+}
+.deco-corner::before,
+.deco-corner::after {
+  content: '';
+  position: absolute;
+  background: var(--gold-deep);
+}
+.deco-corner.tl {
+  top: 112px;
+  left: 32px;
+}
+.deco-corner.tl::before {
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 1px;
+}
+.deco-corner.tl::after {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 44px;
+}
+.deco-corner.tr {
+  top: 112px;
+  right: 32px;
+}
+.deco-corner.tr::before {
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 1px;
+}
+.deco-corner.tr::after {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 44px;
+}
+.deco-corner.bl {
+  bottom: 32px;
+  left: 32px;
+}
+.deco-corner.bl::before {
+  bottom: 0;
+  left: 0;
+  width: 44px;
+  height: 1px;
+}
+.deco-corner.bl::after {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 44px;
+}
+.deco-corner.br {
+  bottom: 32px;
+  right: 32px;
+}
+.deco-corner.br::before {
+  bottom: 0;
+  right: 0;
+  width: 44px;
+  height: 1px;
+}
+.deco-corner.br::after {
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  height: 44px;
+}
+
+/* 顶部状态栏 */
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1080px;
+  height: 80px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 10;
+}
+.status-bar .brand {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--ink);
+}
+.status-bar .brand .sub {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--gold-deep);
+  margin-left: 8px;
+}
+.status-bar .clock {
+  font-size: 15px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 金色分隔线 */
+.gold-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.gold-divider .line {
+  flex: 1;
+  height: 1.5px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+.gold-divider .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.gold-divider .dot.sm {
+  width: 10px;
+  height: 10px;
+}
+
+/* 通用按钮 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font-cn);
+  font-size: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    filter 0.15s ease;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary {
+  background: linear-gradient(135deg, #c9a24d, #a67c1f);
+  color: #fff;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1.5px solid var(--cream-2);
+}
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* 遮罩层 */
+.dim-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 17, 8, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+.pop-in {
+  animation: popIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}

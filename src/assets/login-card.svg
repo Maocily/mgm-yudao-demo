@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 会员卡占位图：rectangle + chip + magnetic strip line -->
+  <defs>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3d6"/>
+      <stop offset="100%" stop-color="#f3e0ad"/>
+    </linearGradient>
+  </defs>
+  <rect x="22" y="56" width="156" height="100" rx="14" fill="url(#cardBg)" stroke="#c9a24d" stroke-width="2"/>
+  <rect x="36" y="74" width="32" height="24" rx="4" fill="#c9a24d"/>
+  <rect x="36" y="118" width="120" height="6" rx="3" fill="#c9a24d" opacity="0.4"/>
+  <rect x="36" y="132" width="80" height="6" rx="3" fill="#c9a24d" opacity="0.4"/>
+  <text x="100" y="178" text-anchor="middle" font-family="Noto Sans SC, sans-serif" font-size="14" fill="#8a650f" opacity="0.6">PLACEHOLDER</text>
+</svg>

@@ -1,0 +1,54 @@
+{
+  "name": "mgm-kiosk-terminal",
+  "version": "0.1.0",
+  "description": "MGM 自助终端 (Kiosk) 桌面应用 — Electron + Vue3",
+  "main": "dist-electron/main.cjs",
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "vue-tsc --noEmit",
+    "build": "vue-tsc --noEmit && vite build && node scripts/build-electron.mjs",
+    "preview": "vite preview",
+    "electron:dev": "cross-env NODE_ENV=development VITE_DEV_SERVER_URL=http://localhost:5199 ELECTRON_RUN_AS_NODE= concurrently -k -s first \"vite --port 5199\" \"wait-on tcp:5199 && node scripts/build-electron.mjs && electron .\"",
+    "electron:build": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vue-i18n": "^11.0.0",
+    "pinia": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.25.0",
+    "sass": "^1.83.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6",
+    "vue-tsc": "^2.2.0",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "com.mgm.kiosk.terminal",
+    "productName": "MGM Kiosk",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
