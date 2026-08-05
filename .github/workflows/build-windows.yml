@@ -1,6 +1,6 @@
 name: build-windows
 
-# 手动触发，或推 main 时自动跑（可按需删掉 push 块）
+# 手动触发，或推 main 时自动跑
 on:
   workflow_dispatch:
   push:
@@ -13,9 +13,8 @@ jobs:
   build:
     name: Build Windows .exe
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: kiosk-terminal
+    # 不用 defaults.working-directory，所有路径显式相对 GITHUB_WORKSPACE (repo 根)
+    # 避免 setup-node 的 cache-dependency-path 与 working-directory 互相干扰
 
     steps:
       - name: Checkout
@@ -24,17 +23,21 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
+          # 相对 GITHUB_WORKSPACE (repo 根) —— 锁文件在 kiosk-terminal/ 下
           cache-dependency-path: kiosk-terminal/package-lock.json
 
       - name: Install dependencies
+        working-directory: kiosk-terminal
         run: npm ci
 
       - name: Type check & build renderer + electron
+        working-directory: kiosk-terminal
         run: npm run build
 
       - name: Package Windows installer (NSIS) + portable
+        working-directory: kiosk-terminal
         run: npx electron-builder --win --x64 --publish never
 
       - name: Upload installer (.exe)
