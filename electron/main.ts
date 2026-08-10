@@ -106,6 +106,49 @@ ipcMain.handle('kiosk:relaunch', () => {
   return true
 })
 
+/**
+ * 打印一张票券:用隐藏 BrowserWindow 加载 HTML,调 webContents.print 静默打印。
+ * 走 OS 的默认打印机(或 deviceName 指定),跨 Mac/Win/Linux。
+ */
+ipcMain.handle('kiosk:print-ticket', async (_event, payload: { html: string; deviceName?: string }) => {
+  const { html, deviceName } = payload
+  const printWin = new BrowserWindow({
+    show: false,
+    width: 800,
+    height: 600,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+      javascript: false
+    }
+  })
+  try {
+    // 用 data URL 加载,避免依赖本地文件路径
+    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(html)
+    await printWin.loadURL(dataUrl)
+    // 给一点时间让样式/字体生效
+    await new Promise((r) => setTimeout(r, 100))
+
+    return await new Promise<{ ok: boolean; reason?: string }>((resolve) => {
+      printWin.webContents.print(
+        {
+          silent: true,
+          printBackground: true,
+          ...(deviceName ? { deviceName } : {})
+        },
+        (success: boolean, failureReason: string) => {
+          resolve({ ok: success, reason: success ? undefined : failureReason })
+        }
+      )
+    })
+  } catch (err) {
+    return { ok: false, reason: err instanceof Error ? err.message : String(err) }
+  } finally {
+    if (!printWin.isDestroyed()) printWin.close()
+  }
+})
+
 app.whenReady().then(() => {
   createWindow()
   if (!isDev) {

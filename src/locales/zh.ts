@@ -62,9 +62,14 @@ export default {
     skip: '登出',
     // 设计稿 1 个 / 3 个 / 多 场景
     seeMore: '查看更多',
+    seeMoreHint: '向下滑动查看更多活动',
     outOfStock: '已领完',
     quantityStepper: '兑换数量',
-    confirmRedeem: '确认兑换'
+    confirmRedeem: '确认兑换',
+    // 选数量弹窗
+    chooseQtyTitle: '选择兑换数量',
+    chooseQtyHint: '最多可兑换 {n} 张',
+    confirmNext: '确认'
   },
   redeem: {
     title: '请确认兑换的票券',
@@ -72,14 +77,16 @@ export default {
     quantity: '兑换数量',
     unit: '张',
     // 设计稿"票券列印後后无法修改或重新发行，请确认后再列印。"
-    warning: '票券列印后无法修改或重新发行，请确认后再列印。',
+    warning: '票券列印后无法修改或重新发行，<br/>请确认后再列印。',
     cancel: '取消',
     print: '打印'
   },
   printing: {
     // 设计稿用"票劵"（劵）
     title: '票劵打印中',
-    progress: '正在为您打印第 {cur}/{total} 张票劵，请稍候。',
+    titleShort: '正在打印第 {cur}/{total} 张',
+    progress: '正在为您打印第 {cur}/{total} 张票券，请稍候。',
+    pleaseWait: '目前正在打印第 {n} 张，请勿离开',
     total: '共 {total} 张票劵，正在依次输出',
     // 设计稿"打印中断 / 打印出现异常，已成功打印 1/3 张票劵。\n请重新尝试或联络工作人员。"
     interruptedTitle: '打印中断',
@@ -87,8 +94,10 @@ export default {
     interruptedHint: '请重新尝试或联络工作人员。',
     successTitle: '出票完成',
     successDesc: '请于下方出票口领取票劵',
-    autoLogout: '{n} 秒后将自动登出',
+    autoLogout: '{n} 秒后将自动注销',
+    autoLogoutSuffix: '秒后将自动注销',
     selectOther: '选择其他活动',
+    logout: '注销',
     failTitle: '打印机异常',
     failDesc: '当前会员账号已自动登出。设备已暂停服务，请联系工作人员协助'
   },

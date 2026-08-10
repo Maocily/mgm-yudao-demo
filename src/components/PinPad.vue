@@ -57,10 +57,7 @@ function backspace() {
       <button class="key" @click="press('8')">8</button>
       <button class="key" @click="press('9')">9</button>
       <button class="key key-fn" @click="backspace" aria-label="delete">
-        <svg width="36" height="28" viewBox="0 0 36 28" fill="none">
-          <path d="M9 4 L3 14 L9 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="11" y="9" width="22" height="14" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
-        </svg>
+        <img src="@/assets/icons/BackspaceIcon.png" alt="delete" />
       </button>
       <button class="key" @click="press('0')">0</button>
       <button class="key key-confirm" @click="emit('confirm')">{{ t('common.confirm') }}</button>
@@ -76,18 +73,12 @@ function backspace() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 56px;
+  gap: 16px;
+  width: 100%;
 }
-.shake {
-  animation: shake 0.4s;
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-12px); }
-  75% { transform: translateX(12px); }
-}
+
 .pin-title {
-  font-size: 30px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink);
   text-align: center;
@@ -95,16 +86,17 @@ function backspace() {
 }
 .pin-row {
   display: flex;
-  gap: 32px;
+  gap: 12px;
 }
 .pin-box {
   width: 48px;
   height: 60px;
   border: 1.5px solid var(--gold);
   border-radius: 6px;
-  background: transparent;
+  background: #FFF;
   position: relative;
   transition: background 0.15s;
+
 }
 .pin-box.filled::after {
   content: '';
@@ -118,23 +110,28 @@ function backspace() {
 }
 .keys {
   display: grid;
-  grid-template-columns: repeat(3, 130px);
-  gap: 22px;
+  grid-template-columns: repeat(3, 100px);
+  gap: 10px;
+  width:100%;
 }
 .key {
-  height: 100px;
+  height: 52px;
   border-radius: 12px;
   border: 1.5px solid var(--cream-2);
   background: var(--white);
-  font-size: 40px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--ink);
   font-family: var(--font-cn);
   cursor: pointer;
   transition: transform 0.08s, background 0.15s;
   display: flex;
+  flex:1;
   align-items: center;
   justify-content: center;
+}
+.admin-window .keys{
+  grid-template-columns: repeat(3, 120px);
 }
 .key:active {
   transform: scale(0.95);
@@ -143,18 +140,23 @@ function backspace() {
 .key-fn {
   color: var(--ink-soft);
 }
+.key-fn img {
+  width: 16px;
+  height: 16px;
+}
 .key-confirm {
-  background: linear-gradient(135deg, #c9a24d, #a67c1f);
+  background: #C9A24D;
   color: #fff;
-  font-size: 28px;
+  font-size: 12px;
   font-weight: 600;
   border: none;
 }
 .pin-close {
-  background: transparent;
+  background: url('@/assets/icons/BackIcon.png') no-repeat 10px center;
+  background-size: 11px 11px;
   border: none;
   color: var(--ink-soft);
-  font-size: 24px;
+  font-size: 10px;
   cursor: pointer;
   font-family: var(--font-cn);
   padding: 12px 24px;

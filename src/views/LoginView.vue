@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import StatusBar from '@/components/StatusBar.vue'
@@ -8,11 +8,13 @@ import LangSwitch from '@/components/LangSwitch.vue'
 import PinPad from '@/components/PinPad.vue'
 import { useSessionStore } from '@/store/session'
 import { mockReadCard, mockScanQr, mockNfc, type MemberInfo } from '@/mock/hardware'
-import { MOCK_ADMIN_PIN } from '@/mock/data'
+import { MOCK_ADMIN_PIN, MOCK_MEMBER_PIN } from '@/mock/data'
 
-import cardIllu from '@/assets/3.gif'
+import cardIllu from '@/assets/1.gif'
 import qrIllu from '@/assets/2.gif'
-import nfcIllu from '@/assets/1.gif'
+import nfcIllu from '@/assets/3.gif'
+import lockedIllu from '@/assets/icons/lockRed.png'
+import gangIllu from '@/assets/icons/gantan.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -26,7 +28,6 @@ watch(() => route.query.hint, v => (showHint.value = v === '1'))
 const busy = ref<'card' | 'qr' | 'nfc' | null>(null)
 
 async function login(method: 'card' | 'qr' | 'nfc') {
-  return;
   if (busy.value) return
   busy.value = method
   let member: MemberInfo
@@ -35,10 +36,81 @@ async function login(method: 'card' | 'qr' | 'nfc') {
     else if (method === 'qr') member = await mockScanQr()
     else member = await mockNfc()
     session.login(member)
-    router.push('/pin')
+    // 设计稿"输入密码2"：会员密码以弹窗形式叠加在登录页上，位置距底部 1/5
+    openMemberPin()
   } finally {
     busy.value = null
   }
+}
+
+// ---- 会员 PIN 弹窗（设计稿"输入密码2" — overlay，非独立页面） ----
+const showMemberPin = ref(false)
+const memberPin = ref('')
+const pinAttempts = ref(0)
+const pinState = ref<'input' | 'error' | 'locked'>('input')
+const MAX_ATTEMPTS = 3
+
+// KDialog v-model 适配:用 computed 把 pinState 转成两个 boolean
+// 用户关闭 KDialog 时(set false)自动回到 'input' 状态
+// const showPinError = ref(true)
+const showPinError = computed({
+  get: () => pinState.value === 'error',
+  set: (v) => { if (!v) pinState.value = 'input' }
+})
+// const showPinLocked = ref(true);
+const showPinLocked = computed({
+  get: () => pinState.value === 'locked',
+  set: (v) => { if (!v) pinState.value = 'input' }
+})
+
+function openMemberPin(initialState: 'input' | 'error' | 'locked' = 'input') {
+  memberPin.value = ''
+  pinAttempts.value = initialState === 'locked' ? MAX_ATTEMPTS : 0
+  pinState.value = initialState
+  showMemberPin.value = true
+}
+
+function onMemberConfirm() {
+  if (memberPin.value.length < 4) return
+  if (memberPin.value === MOCK_MEMBER_PIN) {
+    showMemberPin.value = false
+    pinState.value = 'input'
+    router.push('/campaign')
+    return
+  }
+  pinAttempts.value++
+  memberPin.value = ''
+  pinState.value = pinAttempts.value >= MAX_ATTEMPTS ? 'locked' : 'error'
+}
+
+function dismissPinError() {
+  pinState.value = 'input'
+}
+
+function closeMemberPin() {
+  showMemberPin.value = false
+  memberPin.value = ''
+  pinAttempts.value = 0
+  pinState.value = 'input'
+  session.reset()
+}
+
+function backHomeFromLock() {
+  closeMemberPin()
+  router.push('/standby')
+}
+
+// 预览支持：?pin=input|error|locked 直达指定状态（响应式初始值，setup 期内生效）
+const previewPin = (() => {
+  const p = route.query.pin
+  if (p === 'error' || p === 'locked' || p === 'input') {
+    session.login({ memberId: 'M888168', name: '尊贵会员', cardNo: '**** 6688' })
+    return p
+  }
+  return null
+})()
+if (previewPin) {
+  openMemberPin(previewPin as 'input' | 'error' | 'locked')
 }
 
 // ---- 隐藏员工入口：左下角连击 5 次 → 弹出 admin PIN overlay（设计稿"管理员登录"） ----
@@ -115,7 +187,7 @@ function backHome() {
         </div>
         <div class="m-name">{{ t('login.card') }}</div>
         <div class="m-hint">
-          {{ busy === 'card' ? '···' : (showHint ? t('login.cardShortHint') : t('login.cardHint')) }}
+          {{ (showHint ? t('login.cardShortHint') : t('login.cardHint')) }}
         </div>
       </div>
 
@@ -131,7 +203,7 @@ function backHome() {
         </div>
         <div class="m-name">{{ t('login.qr') }}</div>
         <div class="m-hint">
-          {{ busy === 'qr' ? '···' : (showHint ? t('login.qrShortHint') : t('login.qrHint')) }}
+          {{ (showHint ? t('login.qrShortHint') : t('login.qrHint')) }}
         </div>
       </div>
 
@@ -147,7 +219,7 @@ function backHome() {
         </div>
         <div class="m-name">{{ t('login.nfc') }}</div>
         <div class="m-hint">
-          {{ busy === 'nfc' ? '···' : (showHint ? t('login.nfcShortHint') : t('login.nfcHint')) }}
+          {{ (showHint ? t('login.nfcShortHint') : t('login.nfcHint')) }}
         </div>
       </div>
     </div>
@@ -166,19 +238,82 @@ function backHome() {
 
     <!-- 隐藏员工入口热区（左下角） -->
     <div class="staff-hotspot" :class="{ reveal: showHint }" @click="staffTap">
-      <span v-if="showHint" class="tap-badge">{{ t('login.staffHotspotBadge') }}</span>
+      <!-- <span  class="tap-badge">{{ t('login.staffHotspotBadge') }}</span> -->
     </div>
 
-    <!-- 引导标注（仅 ?hint=1 预览时显示） -->
-    <div v-if="showHint" class="gesture-annotation">
-      <div class="ga-title">{{ t('login.staffEntry') }}</div>
-      <div class="ga-desc">{{ t('login.staffHotspotHint') }}</div>
-      <div class="ga-foot">{{ t('login.staffGestureDesc') }}</div>
+
+
+    <!-- 会员 PIN 弹窗（设计稿"输入密码2" — 距底部 1/5，叠加在登录页上） -->
+    <div v-if="showMemberPin" class="pin-overlay" @click.self="closeMemberPin">
+      <div class="pin-window">
+        <div class="pin-title" v-html="t('pin.memberTitle')"></div>
+        <PinPad
+          v-model="memberPin"
+          :max-length="4"
+          @confirm="onMemberConfirm"
+          @close="closeMemberPin"
+        />
+      </div>
     </div>
 
-    <!-- 管理员 PIN overlay（设计稿"管理员登录"—— 与登录页同页叠加） -->
+    <!-- 密码错误弹窗（设计稿"输入密码2. 密码错误"） — KDialog -->
+    <KDialog
+      v-model="showPinError"
+      width="740px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <div class="modal-body">
+        <div class="modal-icon ">
+          <img :src="gangIllu" alt="locked" />
+        </div>
+        <div class="pin-error-title">
+          {{ t('pin.errorTitle') }}
+        </div>
+   
+       <div>
+         <div class="modal-desc">{{ t('pin.errorDesc') }}</div>
+        <div class="modal-desc">{{ t('pin.errorNote') }}</div>
+       </div>
+      </div>
+      <template #footer>
+        <button class="k-btn k-btn-primary" @click="dismissPinError">
+          {{ t('common.confirm') }}
+        </button>
+      </template>
+    </KDialog>
+
+    <!-- 账户锁定弹窗（设计稿"输入密码2. 账户锁定"） — KDialog -->
+    <KDialog
+      v-model="showPinLocked"
+      width="740px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <div class="modal-body">
+        <div class="modal-icon ">
+          <img :src="lockedIllu" alt="locked" />
+        </div>
+        <div class="pin-error-title">
+          {{ t('pin.lockedTitle') }}
+        </div>
+        <div class="modal-desc">
+          {{ t('pin.lockedDesc') }}<br />
+          {{ t('pin.lockedDesc2') }}
+        </div>
+      </div>
+      <template #footer>
+        <button class="k-btn k-btn-primary" @click="backHomeFromLock">
+          {{ t('common.confirm') }}
+        </button>
+      </template>
+    </KDialog>
+
+    <!-- 管理员 PIN overlay（设计稿"管理员登录"—— 居中叠加） -->
     <div v-if="showAdmin" class="dim-overlay" @click.self="closeAdmin">
-      <div class="admin-window pop-in" :class="{ shake: adminError }">
+      <div class="admin-window">
         <div class="admin-title">{{ t('pin.adminTitle') }}</div>
         <PinPad
           v-model="adminPin"
@@ -194,7 +329,7 @@ function backHome() {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .login {
   width: 1080px;
   height: 1820px;
@@ -264,7 +399,7 @@ function backHome() {
   transition: transform 0.1s, box-shadow 0.2s, border-color 0.2s;
 }
 .method-card:active {
- 
+
 }
 .method-card.busy {
 }
@@ -393,41 +528,110 @@ function backHome() {
   opacity: 0.8;
 }
 
-/* ---- Admin overlay ---- */
+/* ---- 会员 PIN overlay（设计稿"输入密码2"） ----
+   距底部 1/5：bottom: 20%（相对 .login 高度 1820 = 364px） */
+.pin-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 14, 8, 0.45);
+  z-index: 40;
+}
+.pin-window {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  padding: 20px;
+  background: var(--cream);
+  border-radius: 32px;
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.pin-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* 错误/锁定弹窗（KDialog 内容区） */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  text-align: center;
+  padding: 8px 0;
+}
+.pin-error-title{
+  color:#9E1B2A;
+  font-size:36px;
+  font-weight:700;
+}
+.modal-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+  img {
+    width:132px;
+    height:132px;
+  }
+}
+.modal-icon--warn { background: var(--warning); }
+.modal-icon--danger { background: var(--danger); font-size: 56px; }
+.modal-desc {
+  font-size: 26px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.modal-note {
+  font-size: 22px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* ---- Admin overlay（居中叠加，与会员 PIN 区分） ---- */
 .dim-overlay {
   position: absolute;
   inset: 0;
   background: rgba(20, 14, 8, 0.6);
-  z-index: 30;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 0.2s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 .admin-window {
   background: var(--cream);
   border-radius: 32px;
   box-shadow: var(--shadow-modal);
-  padding: 64px 80px 56px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  width:420px;
+  box-sizing:border-box;
+  transform: translateX(-50%);
 }
-.admin-window.shake {
-  animation: shake 0.4s;
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-12px); }
-  75% { transform: translateX(12px); }
-}
+
 .admin-title {
-  font-size: 32px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink);
 }
@@ -435,5 +639,12 @@ function backHome() {
   color: var(--danger);
   font-size: 24px;
   margin-top: -8px;
+}
+
+:deep .k-dialog__footer{
+  padding:0;
+  button{
+    width:100%;
+  }
 }
 </style>

@@ -42,15 +42,6 @@ export const mockCampaigns: Campaign[] = [
     descEn: 'Exclusive rewards for platinum members',
     image: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=400&q=80',
     maxQty: 3
-  },
-  {
-    id: 'D',
-    nameCn: '活动名称D',
-    nameEn: 'Weekend Dining Voucher Lucky Draw',
-    descCn: '周末餐饮礼券幸运抽奖',
-    descEn: 'Weekend dining voucher lucky draw',
-    image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80',
-    maxQty: 0
   }
 ]
 

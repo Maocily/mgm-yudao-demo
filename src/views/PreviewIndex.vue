@@ -24,9 +24,9 @@ const groups = [
       { label: '00 待机页', path: '/standby' },
       { label: '01 选择登录方式', path: '/login' },
       { label: '01 · 员工入口手势', path: '/login?hint=1' },
-      { label: '02 会员 PIN', path: '/pin' },
-      { label: '02 PIN · 密码错误', path: '/pin?state=error' },
-      { label: '02 PIN · 账户锁定', path: '/pin?state=locked' }
+      { label: '02 会员 PIN · 正常输入', path: '/login?pin=input' },
+      { label: '02 会员 PIN · 密码错误', path: '/login?pin=error' },
+      { label: '02 会员 PIN · 账户锁定', path: '/login?pin=locked' }
     ]
   },
   {

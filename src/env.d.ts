@@ -3,6 +3,7 @@
 interface KioskBridge {
   requestExit: () => Promise<boolean>
   relaunch: () => Promise<boolean>
+  printTicket: (html: string, deviceName?: string) => Promise<{ ok: boolean; reason?: string }>
 }
 
 interface Window {

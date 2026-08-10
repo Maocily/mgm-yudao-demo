@@ -43,7 +43,7 @@ export default {
     staffGestureDesc: 'Tap the bottom-left 5 times to show the admin PIN'
   },
   pin: {
-    memberTitle: 'Enter member PIN (4 digits)',
+    memberTitle: 'Please enter <br/> 4 digits Member PIN to login',
     adminTitle: 'Enter admin password',
     errorTitle: 'Incorrect PIN',
     errorDesc: 'Please try again.',
@@ -60,9 +60,14 @@ export default {
     oneOfOne: 'Event A',
     oneOfOneEn: 'MGM Anniversary Bonus Draw',
     seeMore: 'See More',
+    seeMoreHint: 'Swipe down for more events',
     outOfStock: 'Sold Out',
     quantityStepper: 'Quantity',
-    confirmRedeem: 'Confirm'
+    confirmRedeem: 'Confirm',
+    // qty modal
+    chooseQtyTitle: 'Choose Quantity',
+    chooseQtyHint: 'Up to {n} ticket(s)',
+    confirmNext: 'Next'
   },
   redeem: {
     title: 'Confirm Your Tickets',
@@ -75,7 +80,9 @@ export default {
   },
   printing: {
     title: 'Printing Tickets',
+    titleShort: 'Printing ticket {cur}/{total}',
     progress: 'Printing ticket {cur}/{total}, please wait.',
+    pleaseWait: 'Printing ticket {n}, please do not leave',
     total: '{total} tickets in total, printing in sequence',
     interruptedTitle: 'Print Interrupted',
     interruptedDesc: 'An error occurred. {cur}/{total} tickets printed.',
@@ -83,7 +90,9 @@ export default {
     successTitle: 'Print Complete',
     successDesc: 'Please collect your tickets from the slot below',
     autoLogout: 'Auto log out in {n}s',
+    autoLogoutSuffix: 's to auto log out',
     selectOther: 'Choose Another Event',
+    logout: 'Log Out',
     failTitle: 'Printer Error',
     failDesc: 'Your account has been logged out. Service is suspended, please contact staff.'
   },
