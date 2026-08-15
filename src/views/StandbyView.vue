@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ref, onMounted, onUnmounted } from 'vue'
 import StatusBar from '@/components/StatusBar.vue'
 import DecoCorners from '@/components/DecoCorners.vue'
+import handelIcon from '@/assets/handel.svg'
 import { mockPosters } from '@/mock/data'
 
 const router = useRouter()
@@ -67,19 +68,11 @@ function wake() {
       <span class="ripple r1" />
       <span class="ripple r2" />
       <div class="inner">
-        <svg width="46" height="46" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9 11V6a2 2 0 1 1 4 0v5m0 0V4a2 2 0 1 1 4 0v7m0 0a2 2 0 1 1 4 0v2a8 8 0 0 1-8 8h-2a8 8 0 0 1-7-4l-2-3.5a2 2 0 0 1 3.4-2L7 14"
-            stroke="#8A650F"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <img :src="handelIcon" alt="touch" width="46" height="46" />
       </div>
     </div>
     <div class="cta-text">{{ t('standby.touch') }}</div>
-    <div class="cta-sub">TOUCH TO START</div>
+    <div class="cta-sub">TAP TO START</div>
   </div>
 
     <StatusBar />
@@ -90,7 +83,7 @@ function wake() {
 <style scoped>
 .standby {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   position: relative;
   background: var(--cream);
 }
@@ -140,9 +133,11 @@ function wake() {
 }
 .hero-title {
   color: #fff;
-  font-size: 88px;
+  font-size: 96px;
   font-weight: 700;
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  letter-spacing: 4px;
+  line-height: 1.1;
 }
 .standby-divider {
   position: absolute;
@@ -158,12 +153,12 @@ function wake() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
 }
 .touch-ring {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,27 +170,21 @@ function wake() {
   animation: ripple 2.4s ease-out infinite;
 }
 .ripple.r1 {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
 }
 .ripple.r2 {
-  width: 135px;
-  height: 135px;
+  width: 150px;
+  height: 150px;
   animation-delay: 0.8s;
 }
 @keyframes ripple {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1.15);
-    opacity: 0;
-  }
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
 }
 .inner {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: #fff;
   display: flex;
@@ -207,12 +196,14 @@ function wake() {
   font-size: 34px;
   color: var(--ink);
   letter-spacing: 4px;
+  font-weight: 700;
 }
 .cta-sub {
-  font-size: 18px;
+  font-size: 22px;
   color: var(--gold-deep);
-  letter-spacing: 8px;
+  letter-spacing: 6px;
   opacity: 0.7;
   margin-top: -16px;
+  font-weight: 500;
 }
 </style>

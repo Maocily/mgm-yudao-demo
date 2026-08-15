@@ -25,9 +25,9 @@ export default {
     card: '刷卡登入',
     cardHint: '请于右侧读卡器刷会员卡',
     qr: '扫码登入',
-    qrHint: '请打开美高梅 APP 出示会员码进行扫码',
+    qrHint: '请打开美高梅 APP 出示会员码\n进行扫码',
     nfc: '感应登入',
-    nfcHint: '请打开美高梅 APP 并将手机靠近感应区',
+    nfcHint: '请打开美高梅 APP 并将手机\n靠近感应区',
     // 隐藏员工入口版用更短副标题
     cardShort: '刷卡登入',
     cardShortHint: '在读卡器中刷您的会员卡',

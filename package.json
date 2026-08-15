@@ -58,5 +58,6 @@
     "portable": {
       "artifactName": "MGM-Kiosk-${version}-portable.exe"
     }
-  }
+  },
+  "//PR-14-snyk": "Snyk 3 条 transitive CVE 修复, overrides 见 pnpm-workspace.yaml"
 }

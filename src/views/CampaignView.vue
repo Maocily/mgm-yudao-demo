@@ -355,22 +355,23 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .campaign {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   position: relative;
   background: var(--cream);
 }
 .greeting {
   position: absolute;
-  top: 140px;
+  top: 150px;
   left: 0;
   width: 1080px;
   text-align: center;
 }
 .greeting .title {
-  font-size: 44px;
+  font-size: 48px;
   font-weight: 700;
   color: var(--ink);
   letter-spacing: 2px;
+  line-height: 1.2;
 }
 
 .empty {
@@ -429,26 +430,29 @@ onBeforeUnmount(() => {
   padding: 40px 36px 24px;
 }
 .cb-name {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 700;
   color: var(--ink);
+  letter-spacing: 1px;
 }
 .cb-desc {
   font-size: 22px;
   color: var(--ink-soft);
   margin-top: 14px;
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 .cb-join {
   grid-column: 2;
   margin: 24px 36px 32px;
-  height: 92px;
-  font-size: 30px;
+  height: 68px;
+  font-size: 22px;
+  font-weight: 700;
 }
 .cb-soldout {
   grid-column: 2;
   margin: 32px 36px;
-  font-size: 28px;
+  font-size: 22px;
   color: var(--ink-soft);
   text-align: center;
   padding: 32px 0;
@@ -486,11 +490,12 @@ onBeforeUnmount(() => {
   background-position: center;
 }
 .cm-name {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--ink);
   padding: 24px 24px 0;
   line-height: 1.4;
+  letter-spacing: 1px;
 }
 .cm-desc {
   font-size: 20px;
@@ -498,11 +503,13 @@ onBeforeUnmount(() => {
   padding: 12px 24px;
   line-height: 1.5;
   flex: 1;
+  letter-spacing: 1px;
 }
 .cm-join {
   margin: 12px 24px 24px;
-  height: 76px;
-  font-size: 24px;
+  height: 64px;
+  font-size: 22px;
+  font-weight: 700;
 }
 .cm-soldout {
   margin: 12px 24px 24px;
@@ -517,10 +524,10 @@ onBeforeUnmount(() => {
 /* === 4+ 滚动列表 === */
 .layout-scroll {
   position: absolute;
-  top: 260px;
+  top: 270px;
   left: 80px;
   width: 920px;
-  height: 1500px;
+  height: 1440px;
 }
 .activity-scroll {
   height: 100%;
@@ -563,26 +570,33 @@ onBeforeUnmount(() => {
   text-align: left;
 }
 .cl-name {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 700;
   color: var(--ink);
+  letter-spacing: 1px;
+  line-height: 1.3;
 }
 .cl-desc {
-  font-size: 20px;
+  font-size: 18px;
   color: var(--ink-soft);
-  margin-top: 8px;
-  line-height: 1.4;
+  margin-top: 10px;
+  line-height: 1.5;
+  letter-spacing: 1px;
 }
 .cl-join {
   position: absolute;
-  background: #C9A24D;
-  color: #FFF;
+  background: #c9a24d;
+  color: #fff;
   left: 36px;
   bottom: 20px;
-  height: 62px;
-  padding: 0 36px;
-  font-size: 26px;
+  height: 68px;
+  padding: 0 40px;
+  font-size: 22px;
+  font-weight: 700;
   flex-shrink: 0;
+  border: 1.5px solid #c9a24d;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(201, 162, 77, 0.25);
 }
 .cl-soldout {
   position: absolute;
@@ -600,19 +614,19 @@ onBeforeUnmount(() => {
 .bottom-bar {
   position: absolute;
   left: 0;
-  bottom: 32px;
+  bottom: 40px;
   width: 1080px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   z-index: 5;
 }
 
 /* Activity Scroll Hint: 向下滑动查看更多活动 */
 .scroll-hint {
   font-size: 22px;
-  color: #8A650F;
+  color: #8a650f;
   letter-spacing: 2px;
   text-align: center;
 }
@@ -632,21 +646,22 @@ onBeforeUnmount(() => {
 }
 .skip-row:active { transform: scale(0.97); }
 .skip-icon {
-  width: 40px;
-  height: 40px;
-  color: #8A650F;
+  width: 36px;
+  height: 36px;
+  color: #8a650f;
   flex-shrink: 0;
 }
 .skip-text {
-  font-size: 28px;
-  color: #7A6546;
+  font-size: 32px;
+  color: #7a6546;
   letter-spacing: 2px;
+  font-weight: 500;
 }
 
 /* === 通用按钮 (活动卡片) === */
 .btn {
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   font-family: var(--font-cn);
   font-weight: 600;
@@ -654,8 +669,9 @@ onBeforeUnmount(() => {
 }
 .btn:active { transform: scale(0.98); }
 .btn-primary {
-  background: #C9A24D;
+  background: #c9a24d;
   color: #fff;
+  box-shadow: 0 4px 12px rgba(201, 162, 77, 0.25);
 }
 .btn-ghost {
   background: var(--white);
@@ -669,8 +685,8 @@ onBeforeUnmount(() => {
   border-radius: 14px;
   cursor: pointer;
   font-family: var(--font-cn);
-  font-weight: 600;
-  font-size: 28px;
+  font-weight: 700;
+  font-size: 22px;
   height: 68px;
   min-width: 220px;
   padding: 0 40px;
@@ -689,26 +705,30 @@ onBeforeUnmount(() => {
 .redeem-body {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
   padding: 4px 0;
+  width: 100%;
 }
 .redeem-info-card {
   background: var(--white);
   border: 1.5px solid #d8c28a;
   border-radius: 16px;
-  padding: 8px 24px;
+  padding: 12px 28px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .redeem-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 0;
+  padding: 22px 0;
   gap: 16px;
 }
 .redeem-row:last-child { border-bottom: none; }
 .redeem-label {
   font-size: 26px;
   color: var(--ink-soft);
+  letter-spacing: 1px;
 }
 .redeem-value {
   font-size: 26px;
@@ -716,6 +736,7 @@ onBeforeUnmount(() => {
   font-weight: 500;
   text-align: right;
   word-break: break-word;
+  letter-spacing: 1px;
 }
 .redeem-value--qty {
   display: flex;
@@ -723,9 +744,9 @@ onBeforeUnmount(() => {
   gap: 6px;
 }
 .redeem-qty {
-  font-size: 40px;
+  font-size: 68px;
   font-weight: 700;
-  color: var(--ink-soft);
+  color: var(--ink);
   font-family: var(--font-en);
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -735,12 +756,13 @@ onBeforeUnmount(() => {
   color: var(--ink-soft);
 }
 .redeem-warning {
-  font-size: 30px;
-  padding:26px 0;
+  font-size: 22px;
+  padding: 20px 0 4px;
   color: var(--ink-soft);
   line-height: 1.5;
   text-align: center;
   white-space: pre-line;
+  letter-spacing: 1px;
 }
 
 /* === 弹窗③ 正在打印 (设计稿 05 正在打印中 660x480) === */
@@ -748,10 +770,11 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   padding: 40px 0 24px;
   min-height: 360px;
   justify-content: center;
+  width: 100%;
 }
 .printing-spinner {
   width: 100px;
@@ -760,7 +783,7 @@ onBeforeUnmount(() => {
   border-top-color: var(--gold);
   border-radius: 50%;
   animation: printing-spin 1s linear infinite;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 @keyframes printing-spin {
   to { transform: rotate(360deg); }
@@ -771,18 +794,21 @@ onBeforeUnmount(() => {
   font-weight: 700;
   text-align: center;
   line-height: 1.4;
+  letter-spacing: 1px;
 }
 .printing-desc {
-  font-size: 30px;
+  font-size: 24px;
   color: var(--ink-soft);
   text-align: center;
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 .printing-total {
-  font-size: 30px;
+  font-size: 22px;
   color: #9e8f76;
   text-align: center;
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 
 /* === 弹窗④ 打印完成 (设计稿 06 打印成功 660x672) === */
@@ -792,17 +818,19 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 24px;
   padding: 32px 0 16px;
+  width: 100%;
 }
 /* 设计稿:金底 + 白对勾 */
 .success-icon {
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   background: var(--gold);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 8px 24px rgba(201, 162, 77, 0.3);
 }
 .success-check {
   color: #fff;
@@ -817,20 +845,23 @@ onBeforeUnmount(() => {
   font-weight: 700;
   text-align: center;
   line-height: 1.4;
+  letter-spacing: 1px;
 }
 .success-desc {
-  font-size: 30px;
+  font-size: 24px;
   color: var(--ink-soft);
   text-align: center;
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 /* 设计稿:360 宽米色框 + 金边 */
 .success-countdown-box {
-  width: 360px;
+  width: 100%;
+  max-width: 400px;
   background: #fff8ea;
   border: 1.5px solid var(--cream-2);
   border-radius: 16px;
-  padding: 20px 24px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -839,24 +870,26 @@ onBeforeUnmount(() => {
 .countdown-num-row {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
   color: var(--gold);
 }
 .countdown-num {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
   font-family: var(--font-en);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 .countdown-unit {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 500;
+  color: var(--gold);
 }
 .countdown-suffix {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--ink-soft);
   text-align: center;
+  letter-spacing: 1px;
 }
 
 @keyframes fadeIn {
@@ -872,7 +905,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    gap: 20px;
+    gap: 18px;
     height: fit-content;
     justify-content: flex-start;
     padding: 24px 28px;
@@ -885,8 +918,8 @@ onBeforeUnmount(() => {
         font-size: 30px;
         font-style: normal;
         font-weight: 700;
-        letter-spacing: 0px;
-        line-height: normal;
+        letter-spacing: 1px;
+        line-height: 1.3;
         text-align: left;
         width: 100%;
     }
@@ -896,15 +929,15 @@ onBeforeUnmount(() => {
         font-size: 22px;
         font-style: normal;
         font-weight: 500;
-        letter-spacing: 0px;
-        line-height: 31px;
+        letter-spacing: 1px;
+        line-height: 1.6;
         text-align: left;
         width: 100%;
     }
 }
 .k-dialog__footer {
   gap: 24px;
-  padding: 24px 40px 32px;
+  padding: 0 0 8px;
 
   button {
     flex: 1;

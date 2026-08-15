@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import backspaceIcon from '@/assets/svg-icons/icon-backspace.svg'
 
 const props = withDefaults(
   defineProps<{
@@ -57,7 +58,7 @@ function backspace() {
       <button class="key" @click="press('8')">8</button>
       <button class="key" @click="press('9')">9</button>
       <button class="key key-fn" @click="backspace" aria-label="delete">
-        <img src="@/assets/icons/BackspaceIcon.png" alt="delete" />
+        <img :src="backspaceIcon" alt="delete" />
       </button>
       <button class="key" @click="press('0')">0</button>
       <button class="key key-confirm" @click="emit('confirm')">{{ t('common.confirm') }}</button>
@@ -73,92 +74,105 @@ function backspace() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   width: 100%;
+  font-family: var(--font-cn);
 }
 
 .pin-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--ink);
   text-align: center;
   letter-spacing: 1px;
+  line-height: 1.4;
 }
+
 .pin-row {
   display: flex;
-  gap: 12px;
+  gap: 16px;
 }
 .pin-box {
-  width: 48px;
-  height: 60px;
+  width: 56px;
+  height: 68px;
   border: 1.5px solid var(--gold);
-  border-radius: 6px;
-  background: #FFF;
+  border-radius: 8px;
+  background: #fff;
   position: relative;
   transition: background 0.15s;
-
+}
+.pin-box.filled {
+  background: var(--cream-3);
 }
 .pin-box.filled::after {
   content: '';
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--gold-deep);
 }
+
 .keys {
   display: grid;
-  grid-template-columns: repeat(3, 100px);
-  gap: 10px;
-  width:100%;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 360px;
 }
 .key {
-  height: 52px;
+  height: 64px;
   border-radius: 12px;
   border: 1.5px solid var(--cream-2);
-  background: var(--white);
-  font-size: 22px;
-  font-weight: 600;
+  background: #fff;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--ink);
   font-family: var(--font-cn);
   cursor: pointer;
-  transition: transform 0.08s, background 0.15s;
+  transition: transform 0.08s, background 0.15s, border-color 0.15s;
   display: flex;
-  flex:1;
   align-items: center;
   justify-content: center;
 }
-.admin-window .keys{
-  grid-template-columns: repeat(3, 120px);
+.admin-window .keys {
+  max-width: 420px;
 }
 .key:active {
   transform: scale(0.95);
   background: var(--cream-3);
+  border-color: var(--gold);
 }
 .key-fn {
   color: var(--ink-soft);
 }
 .key-fn img {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
 }
 .key-confirm {
-  background: #C9A24D;
+  background: #c9a24d;
   color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  border: none;
+  font-size: 22px;
+  font-weight: 700;
+  border: 1.5px solid #c9a24d;
+  box-shadow: 0 4px 12px rgba(201, 162, 77, 0.25);
 }
+.key-confirm:active {
+  background: #a67c1f;
+  border-color: #a67c1f;
+}
+
 .pin-close {
-  background: url('@/assets/icons/BackIcon.png') no-repeat 10px center;
-  background-size: 11px 11px;
+  background: url('@/assets/svg-icons/icon-back.svg') no-repeat 12px center;
+  background-size: 14px 14px;
   border: none;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 18px;
   cursor: pointer;
   font-family: var(--font-cn);
-  padding: 12px 24px;
+  padding: 12px 24px 12px 32px;
 }
 </style>

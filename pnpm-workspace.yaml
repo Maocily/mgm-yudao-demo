@@ -3,3 +3,9 @@ allowBuilds:
   electron: true
   esbuild: true
   vue-demi: true
+
+# 2026-08-14 PR-14: 强制升级 transitive 依赖, 修复 Snyk 3 条 CVE (postcss + nanoid)
+# pnpm 11+ 用 pnpm-workspace.yaml 里的 overrides 段
+overrides:
+  postcss: 8.5.18
+  nanoid: 5.1.16

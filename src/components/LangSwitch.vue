@@ -22,38 +22,36 @@ function set(lang: 'zh' | 'en') {
 .lang-switch {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: var(--gold-deep);
-  font-size: 22px;
-  letter-spacing: 2px;
-  height:55px;
+  gap: 4px;
+  height: 56px;
   background: #fff;
-  border:1px soid #E8D6A3;
+  border: 1.5px solid #e8d6a3;
   border-radius: 28px;
   box-sizing: border-box;
-  padding: 8px;
-  
+  padding: 4px;
+  font-family: var(--font-cn);
 }
 .lang-switch button {
   background: transparent;
   border: none;
   color: var(--ink-soft);
   font-size: 22px;
+  font-weight: 500;
   cursor: pointer;
-  font-family: var(--font-cn);
-  width:51px;
-  height: 39px;
-  border-radius: 20px;
+  font-family: inherit;
+  width: 78px;
+  height: 44px;
+  border-radius: 22px;
+  transition: background 0.15s, color 0.15s, font-weight 0.15s;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .lang-switch button.active {
-  color: var(--gold-deep);
+  background: #c9a24d;
+  color: #fff;
   font-weight: 700;
-  opacity: 1;
-  color:#FFF;
-  width:71px;
-  background:#C9A24D;
-}
-.sep {
-  opacity: 0.4;
+  box-shadow: 0 2px 8px rgba(201, 162, 77, 0.25);
 }
 </style>

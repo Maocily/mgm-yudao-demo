@@ -15,7 +15,7 @@ export default {
   },
   standby: {
     poster: 'Standby Poster',
-    touch: 'Touch to Start'
+    touch: 'Tap to Start'
   },
   login: {
     welcome: 'Welcome to MGM!',

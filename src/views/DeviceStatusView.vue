@@ -6,7 +6,7 @@ import StatusBar from '@/components/StatusBar.vue'
 import { mockDevice } from '@/mock/data'
 import { mockTestPrint } from '@/mock/hardware'
 
-import chatouIcon from '@/assets/icons/PlugI.png'
+import chatouIcon from '@/assets/svg-icons/icon-plug.svg'
 
 const router = useRouter()
 const route = useRoute()
@@ -92,32 +92,44 @@ const showUnlockSuccess = computed({
       <!-- 设备状态卡组 -->
       <div class="gap20">
         <div class="section-title">{{ t('device.statusSection') }}</div>
-      <div class="grid-1">
-        <div class="card">
+        <div class="card card-network">
           <div class="card-icon">
             <img :src="chatouIcon" />
           </div>
-          <div>
+          <div class="card-body">
             <div class="card-head">
-            <span class="c-name">{{ t('device.network') }}</span>
-            <span class="badge ok">{{ t('device.online') }}</span>
-          </div>
-          <div class="c-rows">
-            <div><span>{{ t('device.ip') }}</span><b>{{ d.ip }}</b></div>
-            <div><span>{{ t('device.latency') }}</span><b>{{ d.latency }} ms</b></div>
-            <div><span>{{ t('device.uplink') }}</span><b>↑ {{ d.uplink }}</b></div>
-            <div><span>{{ t('device.uptime') }}</span><b>{{ t('device.uptimeVal', { h: d.uptimeHours }) }}</b></div>
-          </div>
+              <span class="c-name">{{ t('device.network') }}</span>
+              <span class="badge ok">{{ t('device.online') }}</span>
+            </div>
+            <div class="c-rows">
+              <div>
+                <span>{{ t('device.ip') }}</span>
+                <b>{{ d.ip }}</b>
+              </div>
+              <div>
+                <span>{{ t('device.latency') }}</span>
+                <b>{{ d.latency }} ms</b>
+              </div>
+              <div>
+                <span>{{ t('device.uplink') }}</span>
+                <b>↑ {{ d.uplink }}</b>
+              </div>
+              <div>
+                <span>{{ t('device.uptime') }}</span>
+                <b>{{ t('device.uptimeVal', { h: d.uptimeHours }) }}</b>
+              </div>
+            </div>
           </div>
         </div>
-       </div>
-        <div class="grid flex-row">
+        <div class="row-3">
           <div class="card">
             <div class="card-head">
               <span class="c-name">{{ t('device.paper') }}</span>
               <span class="badge ok">{{ t('device.paperEnough') }}</span>
             </div>
-       
+            <div class="paper-bar">
+              <div class="fill" :style="{ width: `${paperPct}%` }" />
+            </div>
             <div class="c-note">{{ t('device.paperRemain', { remain: d.paperRemain, total: d.paperTotal }) }}</div>
           </div>
 
@@ -137,7 +149,6 @@ const showUnlockSuccess = computed({
             <div class="c-note">{{ t('device.scannerVal') }}</div>
           </div>
         </div>
-    
       </div>
       <div class="gap20">
       <!-- 系统信息 -->
@@ -345,183 +356,175 @@ const showUnlockSuccess = computed({
 <style scoped lang="scss">
 .device {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   position: relative;
   background: var(--cream);
 }
 
-.exit-btn {
-  background: transparent;
-  border: 1.5px solid var(--cream-2);
-  border-radius: var(--r-pill);
-  padding: 14px 40px;
-  font-size: 24px;
-  color: var(--ink-soft);
-  cursor: pointer;
-  font-family: var(--font-cn);
-}
 .scroll {
   position: absolute;
-  top: 100px;
+  top: 120px;
   left: 60px;
+  right: 60px;
   display: flex;
   flex-direction: column;
-  width: 960px;
-  gap:80px;
+  width: auto;
+  gap: 56px;
   overflow-y: auto;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
+  box-sizing: border-box;
 }
-.gap20{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+.gap20 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .section-title {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  font-size: 20px;
+  font-size: 32px;
   font-weight: 700;
-  color: #333;
-  margin: 32px 0 20px;
+  color: var(--ink);
+  margin: 0 0 20px;
+  letter-spacing: 1px;
   &::before {
     content: '';
     display: inline-block;
-    width: 4px;
-    height: 18px;
-    background: #C9A24D;
-    margin-right: 12px;
+    width: 6px;
+    height: 28px;
+    background: #c9a24d;
+    margin-right: 14px;
+    border-radius: 3px;
   }
 }
-.grid-1{
-  
-  
-    .grid {
-     
-      padding:28px 32px;
 
-    }
-    .card{
-       display:flex;
-      flex-direction:row;
-      gap:32px;
-      
-    }
-    .card-icon{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#D8C28A33;
-      width: 64px;
-      border-radius: 50%;
-      height: 64px;
-      img{
-        width: 32px;
-        height: 32px;
-      }
-    }
-  .card-info{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-   
-  }
-  .card-head {
-    justify-content: flex-start;
-  }
-  .c-name {
-  font-size: 24px;}
-   .badge {
-      font-size: 12px;
-      padding: 3px 10px;
-      border-radius:5px;
-      margin-left: 20px;
-    }
-    .badge.ok {
-      background:#8A650F;
-      color: #FFF;
-      
-    }
-}
-.grid {
-  display: grid;
-  gap: 24px;
-}
-.flex-row{
-  display:flex;
-  width:100%;
-  flex-direction:row;
-  gap:20px;
-  .card{
-    flex:1;
-  }
-}
 .card {
   background: var(--white);
   border: 1.5px solid var(--cream-2);
   border-radius: var(--r-md);
-  padding: 32px;
+  padding: 28px 32px;
+  box-sizing: border-box;
 }
+
+/* 网络大卡：左侧 icon + 右侧内容 */
+.card-network {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  align-items: stretch;
+  .card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(216, 194, 138, 0.2);
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    img {
+      width: 36px;
+      height: 36px;
+    }
+  }
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+}
+
 .card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 16px;
 }
 .c-name {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--ink);
+  letter-spacing: 1px;
 }
 .badge {
-  font-size: 12px;
-  padding: 6px 20px;
-  margin-left: 20px;
-  border-radius: 2px;
-  float:right;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  background: rgba(216, 194, 138, 0.2);
+  color: #8a650f;
 }
 .badge.ok {
-  background: #D8C28A33;
-  color: #8A650F;
+  background: rgba(216, 194, 138, 0.25);
+  color: #8a650f;
 }
+
+/* 网络卡：4 个指标行 */
 .c-rows {
   display: flex;
   flex-direction: row;
-  gap: 14px;
+  gap: 24px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 .c-rows > div {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  font-size: 23px;
-  padding-right:20px;
-  &:after{
-    position: absolute;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  padding-right: 24px;
+  &:not(:last-child):after {
     content: '';
-    width:1px;
-    height:14px;
-    background: #EFE5CF;
-    right:0;
-    top:50%;
-    transform: translateY(-50%);
+    position: absolute;
+    right: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--cream-2);
   }
-
-  
 }
 .c-rows span {
   color: var(--ink-soft);
-  margin-right: 12px;
+  font-size: 22px;
+  letter-spacing: 1px;
 }
 .c-rows b {
   color: var(--ink);
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--font-en);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* 三列小卡（纸张/读卡器/扫码） */
+.row-3 {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
+}
+.row-3 .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 .c-note {
-  font-size: 12px;
+  font-size: 22px;
   color: var(--ink-soft);
-  margin-top: 12px;
+  line-height: 1.5;
+  letter-spacing: 1px;
 }
+
 .paper-bar {
-  height: 16px;
+  height: 14px;
   background: var(--cream-2);
   border-radius: var(--r-pill);
   overflow: hidden;
@@ -530,18 +533,22 @@ const showUnlockSuccess = computed({
   height: 100%;
   background: linear-gradient(90deg, #c9a24d, #a67c1f);
 }
+
+/* 系统信息卡 */
 .info-card {
   background: var(--white);
   border: 1.5px solid var(--cream-2);
   border-radius: var(--r-md);
-  padding: 12px 32px;
+  padding: 8px 32px;
 }
 .info-row {
   display: flex;
   justify-content: space-between;
-  padding: 22px 0;
+  align-items: center;
+  padding: 24px 0;
   border-bottom: 1px solid var(--cream-2);
   font-size: 24px;
+  letter-spacing: 1px;
 }
 .info-row:last-child {
   border-bottom: none;
@@ -551,52 +558,68 @@ const showUnlockSuccess = computed({
 }
 .info-row b {
   color: var(--ink);
+  font-weight: 600;
 }
+
+/* 快捷操作 3 列 */
 .actions {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 .action {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:10px;
-  height: 80px;
+  gap: 12px;
+  height: 96px;
   background: var(--white);
-  border: 1.5px solid #C9A24D;
+  border: 1.5px solid #c9a24d;
   border-radius: var(--r-md);
-  font-size: 26px;
-  color: #C9A24D;
+  font-size: 28px;
+  font-weight: 600;
+  color: #8a650f;
   cursor: pointer;
   font-family: var(--font-cn);
+  letter-spacing: 1px;
+  transition: background 0.15s, transform 0.08s;
+  svg {
+    width: 32px;
+    height: 32px;
+  }
 }
-.action.busy {
-  opacity: 0.6;
-}
-.action.danger {
+.action:active { transform: scale(0.98); }
+.action.busy { opacity: 0.6; }
 
-}
 .unlock-btn {
-  width: 960px;
-  height: 96px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:10px;
-  height: 80px;
+  gap: 12px;
+  height: 96px;
   background: var(--white);
-  border: 1.5px solid #C9A24D;
+  border: 1.5px solid #c9a24d;
   border-radius: var(--r-md);
-  font-size: 26px;
-  color: #C9A24D;
+  font-size: 28px;
+  font-weight: 600;
+  color: #8a650f;
   cursor: pointer;
   font-family: var(--font-cn);
+  letter-spacing: 1px;
+  transition: background 0.15s, transform 0.08s;
+  svg {
+    width: 32px;
+    height: 32px;
+  }
 }
-.pin-error-title{
-  color:#333;
-  font-size:36px;
-  font-weight:700;
+.unlock-btn:active { transform: scale(0.98); }
+
+.pin-error-title {
+  color: var(--ink);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 /* 弹窗内容（KDialog 内容区） */
@@ -604,9 +627,10 @@ const showUnlockSuccess = computed({
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
   text-align: center;
   padding: 8px 0;
+  width: 100%;
 }
 .dm-icon {
   width: 120px;
@@ -618,14 +642,21 @@ const showUnlockSuccess = computed({
   font-size: 60px;
   font-weight: 700;
   line-height: 1;
+  background: rgba(216, 194, 138, 0.2);
+  color: #8a650f;
+  svg {
+    width: 80px;
+    height: 80px;
+  }
 }
-.dm-icon--ok {  }
+.dm-icon--ok { background: rgba(46, 125, 50, 0.12); color: var(--success); }
 .dm-icon--danger { background: var(--danger-bg); color: var(--danger); }
-.dm-icon--warn { background: var(--warning-bg); }
+.dm-icon--warn { background: var(--warning-bg); color: var(--warning); }
 .dm-desc {
-  font-size: 26px;
+  font-size: 24px;
   color: var(--ink-soft);
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 
 /* 换纸弹窗：纸张数量输入 */
@@ -633,37 +664,38 @@ const showUnlockSuccess = computed({
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   margin-top: 8px;
 }
 .paper-label {
   font-size: 24px;
   color: var(--ink-soft);
   text-align: left;
+  letter-spacing: 1px;
 }
 .paper-input {
   width: 100%;
   height: 80px;
   padding: 0 24px;
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink);
-  background: #FFF;
+  background: #fff;
   border: 1.5px solid var(--cream-2);
-  border-radius: 12px;
+  border-radius: 14px;
   font-family: var(--font-cn);
   outline: none;
   transition: border-color 0.15s;
+  box-sizing: border-box;
 }
 .paper-input:focus {
   border-color: var(--gold);
   background: var(--white);
 }
-:deep .k-dialog__footer{
-  padding:0;
-  button{
-    flex:1;
+:deep(.k-dialog__footer) {
+  padding: 0;
+  button {
+    flex: 1;
   }
 }
-
 </style>

@@ -13,8 +13,8 @@ import { MOCK_ADMIN_PIN, MOCK_MEMBER_PIN } from '@/mock/data'
 import cardIllu from '@/assets/1.gif'
 import qrIllu from '@/assets/2.gif'
 import nfcIllu from '@/assets/3.gif'
-import lockedIllu from '@/assets/icons/lockRed.png'
-import gangIllu from '@/assets/icons/gantan.png'
+import lockedIllu from '@/assets/svg-icons/icon-lock-red.svg'
+import gangIllu from '@/assets/svg-icons/icon-warning.svg'
 
 const router = useRouter()
 const route = useRoute()
@@ -202,9 +202,7 @@ function backHome() {
           <img :src="qrIllu" alt="qr" />
         </div>
         <div class="m-name">{{ t('login.qr') }}</div>
-        <div class="m-hint">
-          {{ (showHint ? t('login.qrShortHint') : t('login.qrHint')) }}
-        </div>
+        <div class="m-hint" v-html="t('login.qrHint')"></div>
       </div>
 
       <div class="or">{{ t('common.or') }}</div>
@@ -224,16 +222,16 @@ function backHome() {
       </div>
     </div>
 
-    <!-- 底部三段：返回 / 版本号 / 语言切换 -->
+    <!-- 底部三段：版本号 / 返回 / 语言切换 -->
     <div class="footer">
+      <div class="device-tag">{{ t('login.deviceTag') }}</div>
+
       <button class="back-hint" @click="backHome">
         <span class="arrow">‹</span>
         <span class="label">{{ t('common.back') }}</span>
       </button>
 
-      <div class="device-tag">{{ t('login.deviceTag') }}</div>
-
-      <LangSwitch style="position:absolute;right:10px;"/>
+      <LangSwitch />
     </div>
 
     <!-- 隐藏员工入口热区（左下角） -->
@@ -332,7 +330,7 @@ function backHome() {
 <style scoped lang="scss">
 .login {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   position: relative;
   background: var(--cream);
 }
@@ -340,7 +338,7 @@ function backHome() {
 /* 顶部装饰：金色分隔线 + 小菱形 + 小副标 */
 .header-deco {
   position: absolute;
-  top: 130px;
+  top: 140px;
   left: 80px;
   width: 920px;
   text-align: center;
@@ -348,32 +346,35 @@ function backHome() {
 .header-deco .gold-divider {
   margin: 0 auto;
   max-width: 320px;
+  height:18px;
 }
 .sub-cap {
-  margin-top: 16px;
-  font-size: 26px;
-  color: var(--gold-deep);
+  margin-top: 18px;
+  font-size: 20px;
+  color: #C9A24D;
   letter-spacing: 6px;
+  font-weight: 500;
 }
 
 /* 主标题区 */
 .title-block {
   position: absolute;
-  top: 240px;
+  top: 250px;
   left: 0;
   width: 1080px;
   text-align: center;
 }
 .welcome {
-  font-size: 76px;
+  font-size: 78px;
   font-weight: 800;
   color: var(--ink);
   line-height: 1.1;
+  letter-spacing: 2px;
 }
 .subtitle {
   margin-top: 28px;
-  font-size: 30px;
-  color: var(--ink-soft);
+  font-size: 32px;
+  color: #2A2118;
   letter-spacing: 2px;
 }
 
@@ -395,13 +396,8 @@ function backHome() {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  gap:20px;
+  gap: 24px;
   transition: transform 0.1s, box-shadow 0.2s, border-color 0.2s;
-}
-.method-card:active {
-
-}
-.method-card.busy {
 }
 .illu {
   width: 240px;
@@ -409,7 +405,7 @@ function backHome() {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 .illu img {
   width: 100%;
@@ -426,17 +422,31 @@ function backHome() {
   font-size: 18px;
   color: var(--ink-soft);
   text-align: center;
-  line-height: 1.45;
-  padding: 0 8px;
-  min-height: 52px;
+  line-height: 1.5;
+  min-height: 54px;
   white-space: pre-line;
+  letter-spacing: 1px;
 }
 .or {
   align-self: center;
-  font-size: 24px;
-  color: var(--ink-soft);
+  font-size: 18px;
+  color: #C9A24D;
   padding: 0 4px;
   letter-spacing: 2px;
+  font-weight: 500;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.or::before,
+.or::after {
+  content: '';
+  display: block;
+  width: 1.5px;
+  height: 70px;
+  background: var(--gold);
+  border-radius: 1px;
 }
 
 /* 底部三段 */
@@ -445,32 +455,31 @@ function backHome() {
   bottom: 70px;
   left: 80px;
   width: 920px;
-  height:72px;
+  height: 80px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 .back-hint {
   background: transparent;
   border: none;
   color: var(--ink-soft);
-  font-size: 26px;
+  font-size: 32px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--font-cn);
   padding: 0;
+  letter-spacing: 1px;
 }
 .back-hint .arrow {
-  font-size: 36px;
+  font-size: 40px;
   line-height: 1;
 }
 .device-tag {
-  position: absolute;
-  left:0px;
   font-size: 11px;
-  color: #C9A24D66;
+  color: #c9a24d66;
   letter-spacing: 1px;
 }
 
@@ -529,7 +538,7 @@ function backHome() {
 }
 
 /* ---- 会员 PIN overlay（设计稿"输入密码2"） ----
-   距底部 1/5：bottom: 20%（相对 .login 高度 1820 = 364px） */
+   距底部 1/5：bottom: 20%（相对 .login 高度 1920 = 384px） */
 .pin-overlay {
   position: absolute;
   inset: 0;
@@ -538,25 +547,27 @@ function backHome() {
 }
 .pin-window {
   position: absolute;
-  bottom: 20%;
+  bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  width: 360px;
-  padding: 20px;
+  width: 460px;
+  padding: 36px 32px 32px;
   background: var(--cream);
   border-radius: 32px;
   box-shadow: var(--shadow-modal);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+  box-sizing: border-box;
 }
 .pin-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--ink);
   text-align: center;
   letter-spacing: 1px;
+  line-height: 1.4;
 }
 
 /* 错误/锁定弹窗（KDialog 内容区） */
@@ -564,18 +575,19 @@ function backHome() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 32px;
   text-align: center;
   padding: 8px 0;
 }
-.pin-error-title{
-  color:#9E1B2A;
-  font-size:36px;
-  font-weight:700;
+.pin-error-title {
+  color: #9e1b2a;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 .modal-icon {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -585,16 +597,18 @@ function backHome() {
   font-weight: 700;
   line-height: 1;
   img {
-    width:132px;
-    height:132px;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
   }
 }
 .modal-icon--warn { background: var(--warning); }
 .modal-icon--danger { background: var(--danger); font-size: 56px; }
 .modal-desc {
-  font-size: 26px;
+  font-size: 24px;
   color: var(--ink-soft);
   line-height: 1.6;
+  letter-spacing: 1px;
 }
 .modal-note {
   font-size: 22px;
@@ -617,34 +631,37 @@ function backHome() {
   background: var(--cream);
   border-radius: 32px;
   box-shadow: var(--shadow-modal);
-  padding: 20px;
+  padding: 36px 32px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   position: absolute;
   bottom: 20%;
   left: 50%;
-  width:420px;
-  box-sizing:border-box;
+  width: 500px;
+  box-sizing: border-box;
   transform: translateX(-50%);
 }
 
 .admin-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--ink);
+  letter-spacing: 1px;
+  line-height: 1.4;
 }
 .err {
   color: var(--danger);
   font-size: 24px;
   margin-top: -8px;
+  font-weight: 600;
 }
 
-:deep .k-dialog__footer{
-  padding:0;
-  button{
-    width:100%;
+:deep(.k-dialog__footer) {
+  padding: 0;
+  button {
+    width: 100%;
   }
 }
 </style>

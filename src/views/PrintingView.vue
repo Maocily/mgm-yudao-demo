@@ -121,37 +121,41 @@ onUnmounted(clearTimers)
 <style scoped>
 .printing-view {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   position: relative;
   background: var(--cream);
 }
 .modal {
   width: 660px;
-  padding: 72px 56px;
+  padding: 60px 48px;
   background: var(--white);
   border-radius: 28px;
   box-shadow: var(--shadow-modal);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
   text-align: center;
 }
 .p-title {
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 700;
   color: var(--ink);
+  letter-spacing: 1px;
+  line-height: 1.4;
 }
 .p-progress,
 .p-desc {
-  font-size: 27px;
+  font-size: 24px;
   color: var(--ink-soft);
   line-height: 1.5;
+  letter-spacing: 1px;
 }
 .p-total,
 .p-sub {
   font-size: 22px;
   color: var(--gold-deep);
+  letter-spacing: 1px;
 }
 .progress-bar {
   width: 100%;
@@ -194,43 +198,37 @@ onUnmounted(clearTimers)
 }
 @keyframes paper {
   0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-16px);
-  }
+  100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
 }
 
 /* 结果图标 */
 .result-icon {
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 68px;
+  font-size: 60px;
   color: #fff;
+  font-weight: 700;
 }
-.result-icon.ok {
-  background: var(--success);
-}
-.result-icon.warn {
-  background: var(--warning);
-}
-.result-icon.danger {
-  background: var(--danger);
-}
+.result-icon.ok { background: var(--gold); }
+.result-icon.warn { background: var(--warning); }
+.result-icon.danger { background: var(--danger); }
+
 .countdown {
-  font-size: 26px;
+  font-size: 22px;
   color: var(--ink-soft);
 }
 .countdown .num {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
   color: var(--gold-deep);
   margin-right: 6px;
+  font-family: var(--font-en);
+  font-variant-numeric: tabular-nums;
 }
 .result-actions {
   display: flex;
@@ -240,11 +238,15 @@ onUnmounted(clearTimers)
 }
 .result-actions .btn {
   flex: 1;
-  height: 96px;
+  height: 68px;
+  font-size: 22px;
+  font-weight: 700;
 }
 .result-btn {
   width: 100%;
-  height: 96px;
+  height: 68px;
   margin-top: 16px;
+  font-size: 22px;
+  font-weight: 700;
 }
 </style>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-// 将 1080×1820 舞台等比缩放到当前窗口，居中显示
+// 将 1080×1920 舞台等比缩放到当前窗口，居中显示
 const DESIGN_W = 1080
-const DESIGN_H = 1820
+const DESIGN_H = 1920
 const scale = ref(1)
 
 function fit() {
@@ -21,7 +21,7 @@ onUnmounted(() => window.removeEventListener('resize', fit))
 
 <template>
   <div class="kiosk-viewport">
-    <div class="kiosk-stage" :style="{ transform: `translate(-50%, -50%) scale(${scale})` }">
+    <div class="kiosk-stage" :style="{ transform: `scale(${scale})` }">
       <slot />
     </div>
   </div>
@@ -33,5 +33,16 @@ onUnmounted(() => window.removeEventListener('resize', fit))
   inset: 0;
   background: #000;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kiosk-stage {
+  width: 1080px;
+  height: 1920px;
+  flex-shrink: 0;
+  transform-origin: center center;
+  overflow: hidden;
+  background: var(--cream);
 }
 </style>

@@ -126,9 +126,9 @@ function onInput(e: Event) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  width:100%;
-  padding:26px 0;
+  gap: 16px;
+  width: 100%;
+  padding: 24px 0 8px;
   font-family: var(--font-cn);
 }
 
@@ -136,8 +136,8 @@ function onInput(e: Event) {
   display: flex;
   align-items: center;
   flex-direction: row;
-  width:100%;
-  gap: 10px;
+  width: 100%;
+  gap: 16px;
 }
 
 .k-stepper__btn {
@@ -214,13 +214,14 @@ function onInput(e: Event) {
   outline: none;
   background: transparent;
   text-align: center;
-  font-size: 36px;
+  font-size: 68px;
   font-weight: 700;
   color: var(--ink);
   font-family: var(--font-en);
   font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
   appearance: textfield;
+  line-height: 1;
 }
 .k-stepper__input::-webkit-outer-spin-button,
 .k-stepper__input::-webkit-inner-spin-button {
@@ -233,10 +234,11 @@ function onInput(e: Event) {
 }
 
 .k-stepper__hint {
-  font-size: 20px;
+  font-size: 22px;
   color: var(--ink-soft);
   letter-spacing: 1px;
   line-height: 1.4;
+  text-align: center;
 }
 
 .k-stepper.is-disabled .k-stepper__display {

@@ -23,7 +23,15 @@ const overLogin = computed(() => route.query.over === 'login')
     <div class="lock-screen fade-in" :class="{ overlay: overLogin }">
       <div class="lock-content">
         <div class="icon-container">
-          <div class="lock-icon">🔒</div>
+          <svg viewBox="0 0 24 24" width="96" height="96" fill="none" aria-hidden="true">
+            <path
+              d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z"
+              stroke="#9e1b2a"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </div>
         <div class="lock-title">{{ overLogin ? t('lock.lockedTitle') : t('lock.title') }}</div>
         <div v-if="!overLogin" class="lock-subtitle">{{ t('lock.subtitle') }}</div>
@@ -45,7 +53,7 @@ const overLogin = computed(() => route.query.over === 'login')
 .lock-root {
   position: relative;
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
 }
 .under-layer {
   position: absolute;
@@ -55,11 +63,12 @@ const overLogin = computed(() => route.query.over === 'login')
 }
 .lock-screen {
   width: 1080px;
-  height: 1820px;
+  height: 1920px;
   background: linear-gradient(160deg, #1a140d 0%, #3a1a12 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .lock-screen.overlay {
   position: absolute;
@@ -72,45 +81,49 @@ const overLogin = computed(() => route.query.over === 'login')
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 40px;
+  gap: 32px;
   padding: 0 80px;
+  max-width: 920px;
 }
 .icon-container {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: rgba(158, 27, 42, 0.2);
+  background: rgba(158, 27, 42, 0.18);
   border: 2px solid var(--danger);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.lock-icon {
-  font-size: 100px;
+  margin-bottom: 8px;
 }
 .lock-title {
-  font-size: 64px;
+  font-size: 72px;
   font-weight: 700;
   color: #fff;
+  letter-spacing: 4px;
+  line-height: 1.1;
 }
 .lock-subtitle {
   font-size: 36px;
   color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 2px;
 }
 .lock-desc {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 18px;
+  margin-top: 16px;
 }
 .lock-desc p {
   font-size: 28px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
+  letter-spacing: 1px;
 }
 .contact-box {
-  margin-top: 40px;
-  padding: 40px 80px;
+  margin-top: 32px;
+  padding: 36px 80px;
   border: 1.5px solid rgba(201, 162, 77, 0.4);
   border-radius: var(--r-md);
   background: rgba(201, 162, 77, 0.08);
@@ -118,12 +131,15 @@ const overLogin = computed(() => route.query.over === 'login')
 .c-label {
   font-size: 26px;
   color: var(--gold);
+  letter-spacing: 2px;
+  font-weight: 500;
 }
 .c-number {
   font-size: 48px;
   font-weight: 700;
   color: #fff;
-  margin-top: 16px;
+  margin-top: 14px;
   letter-spacing: 4px;
+  font-family: var(--font-en);
 }
 </style>

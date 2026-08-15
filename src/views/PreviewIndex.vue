@@ -94,7 +94,7 @@ const groups = [
 <style scoped>
 .preview {
   width: 1080px;
-  min-height: 1820px;
+  min-height: 1920px;
   background: var(--cream);
   padding: 60px 64px;
   overflow-y: auto;
