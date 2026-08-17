@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import backspaceIcon from '@/assets/svg-icons/icon-backspace.svg'
 
@@ -9,8 +9,10 @@ const props = withDefaults(
     maxLength?: number
     title?: string
     shake?: boolean
+    /** 'pin' 显示 PIN 方框（密码场景），'none' 只渲染数字键盘（外部已有显示） */
+    display?: 'pin' | 'none'
   }>(),
-  { maxLength: 4, title: '', shake: false }
+  { maxLength: 4, title: '', shake: false, display: 'pin' }
 )
 const emit = defineEmits<{
   'update:modelValue': [v: string]
@@ -22,6 +24,21 @@ const { t } = useI18n()
 const slots = computed(() =>
   Array.from({ length: props.maxLength }, (_, i) => i < props.modelValue.length)
 )
+
+// 数字键 0-9 随机打乱（Fisher-Yates），防止肩窥记位
+// 父层用 v-if 控制显隐，每次打开弹窗即重新挂载 → 自动重洗
+function shuffleDigits(): string[] {
+  const d = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  for (let i = d.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[d[i], d[j]] = [d[j], d[i]]
+  }
+  return d
+}
+const digits = ref<string[]>(shuffleDigits())
+onMounted(() => {
+  digits.value = shuffleDigits()
+})
 
 function press(k: string) {
   if (props.modelValue.length >= props.maxLength) return
@@ -36,8 +53,8 @@ function backspace() {
   <div class="pinpad" :class="{ shake }">
     <div v-if="title" class="pin-title">{{ title }}</div>
 
-    <!-- PIN 显示：48x60 方框（设计稿输入密码2） -->
-    <div class="pin-row">
+    <!-- PIN 显示：48x60 方框（设计稿输入密码2） — display='none' 时隐藏 -->
+    <div v-if="display === 'pin'" class="pin-row">
       <div
         v-for="(filled, i) in slots"
         :key="i"
@@ -46,21 +63,13 @@ function backspace() {
       />
     </div>
 
-    <!-- 数字键盘：1-9 / 删除 0 确认 -->
+    <!-- 数字键盘：1-9 / 删除 0 确认（数字位 0-9 每次挂载随机打乱） -->
     <div class="keys">
-      <button class="key" @click="press('1')">1</button>
-      <button class="key" @click="press('2')">2</button>
-      <button class="key" @click="press('3')">3</button>
-      <button class="key" @click="press('4')">4</button>
-      <button class="key" @click="press('5')">5</button>
-      <button class="key" @click="press('6')">6</button>
-      <button class="key" @click="press('7')">7</button>
-      <button class="key" @click="press('8')">8</button>
-      <button class="key" @click="press('9')">9</button>
+      <button v-for="(d, i) in digits.slice(0, 9)" :key="`d${i}`" class="key" @click="press(d)">{{ d }}</button>
       <button class="key key-fn" @click="backspace" aria-label="delete">
         <img :src="backspaceIcon" alt="delete" />
       </button>
-      <button class="key" @click="press('0')">0</button>
+      <button class="key" @click="press(digits[9])">{{ digits[9] }}</button>
       <button class="key key-confirm" @click="emit('confirm')">{{ t('common.confirm') }}</button>
     </div>
 
@@ -120,7 +129,10 @@ function backspace() {
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
   width: 100%;
-  max-width: 360px;
+  max-width: 100%;
+}
+.paper-input-pad{
+  max-width:100%;
 }
 .key {
   height: 64px;

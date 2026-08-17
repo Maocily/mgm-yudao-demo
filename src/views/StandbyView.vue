@@ -71,7 +71,7 @@ function wake() {
         <img :src="handelIcon" alt="touch" width="46" height="46" />
       </div>
     </div>
-    <div class="cta-text">{{ t('standby.touch') }}</div>
+    <div class="cta-text">轻触屏幕</div>
     <div class="cta-sub">TAP TO START</div>
   </div>
 

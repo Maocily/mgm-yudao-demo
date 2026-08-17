@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import StatusBar from '@/components/StatusBar.vue'
+import PinPad from '@/components/PinPad.vue'
 import { mockDevice } from '@/mock/data'
 import { mockTestPrint } from '@/mock/hardware'
 
@@ -13,11 +14,14 @@ const route = useRoute()
 const { t } = useI18n()
 const d = mockDevice
 
-type Modal = null | 'testSuccess' | 'testFail' | 'changePaper' | 'restart' | 'unlockSuccess'
+type Modal = null | 'testSuccess' | 'testFail' | 'changePaper' | 'restart' | 'unlockSuccess' | 'restartPin'
 // 支持 ?modal=testSuccess|testFail|changePaper|restart|unlockSuccess 直达（预览用）
 const modal = ref<Modal>((route.query.modal as Modal) || null)
 watch(() => route.query.modal, v => (modal.value = (v as Modal) || null))
 const testing = ref(false)
+// PR-11 (2026-08-15) / F-01: 重启需要 admin PIN
+const restartPin = ref('')
+const restartPinError = ref(false)
 
 async function testPrint() {
   if (testing.value) return
@@ -29,13 +33,30 @@ async function testPrint() {
 }
 
 function confirmRestart() {
-  modal.value = null
-  // 应用层重启：调用主进程 relaunch（开发环境无 bridge 时降级为刷新）
-  if (window.kioskBridge) {
-    window.kioskBridge.relaunch()
-  } else {
+  // PR-11: 先弹 PIN 收集,主进程做常量时间比对 + 限流
+  modal.value = 'restartPin'
+  restartPin.value = ''
+  restartPinError.value = false
+}
+
+async function submitRestartPin() {
+  if (restartPin.value.length < 6) return
+  if (!window.kioskBridge) {
     router.push('/standby')
+    return
   }
+  const result = await window.kioskBridge.relaunch(restartPin.value)
+  if (!result.ok) {
+    restartPinError.value = true
+    restartPin.value = ''
+  }
+  // ok 时主进程会自己 quit,不需要前端处理
+}
+
+function cancelRestartPin() {
+  modal.value = null
+  restartPin.value = ''
+  restartPinError.value = false
 }
 
 function unlock() {
@@ -49,14 +70,16 @@ function exitToHome() {
 
 const paperPct = Math.round((d.paperRemain / d.paperTotal) * 100)
 
-// 换纸弹窗：输入纸张数量
-const paperInput = ref<number>(d.paperRefill)
+// 换纸弹窗：输入纸张数量（数字键盘用字符串拼接，保存时 parseInt 校验）
+const paperInput = ref<string>(String(d.paperRefill))
 function openChangePaper() {
-  paperInput.value = d.paperRefill
+  paperInput.value = String(d.paperRefill)
   modal.value = 'changePaper'
 }
 function saveChangePaper() {
-  if (paperInput.value < 0) paperInput.value = 0
+  if (paperInput.value.length === 0) return
+  const n = parseInt(paperInput.value, 10)
+  if (Number.isNaN(n) || n < 0) return
   // 演示：保存即关闭弹窗并更新本地数据
   modal.value = null
 }
@@ -262,26 +285,32 @@ const showUnlockSuccess = computed({
       </template>
     </KDialog>
 
-    <!-- 更换打印纸 -->
+    <!-- 更换打印纸：输入框 + 数字键盘（数字 0-9 随机打乱，无 PIN 方框） -->
     <KDialog
       v-model="showChangePaper"
       :title="t('device.changePaperTitle')"
-      width="740px"
+      width="540px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <div class="paper-form">
         <label class="paper-label">{{ t('device.changePaperField') }}</label>
         <input
-          v-model.number="paperInput"
-          type="number"
-          min="0"
-          step="100"
+          v-model="paperInput"
+          inputmode="numeric"
+          maxlength="4"
           class="paper-input"
         />
+        <PinPad
+          v-model="paperInput"
+          :max-length="4"
+          display="none"
+          class="paper-input-pad"
+          @confirm="saveChangePaper"
+          @close="modal = null"
+        />
       </div>
-      <template #footer>
-        <button class="k-btn" @click="modal = null">{{ t('common.cancel') }}</button>
-        <button class="k-btn k-btn-primary" @click="saveChangePaper">{{ t('device.changePaperSave') }}</button>
-      </template>
     </KDialog>
 
     <!-- 重启确认 -->

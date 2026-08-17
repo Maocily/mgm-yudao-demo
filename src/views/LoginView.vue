@@ -8,7 +8,9 @@ import LangSwitch from '@/components/LangSwitch.vue'
 import PinPad from '@/components/PinPad.vue'
 import { useSessionStore } from '@/store/session'
 import { mockReadCard, mockScanQr, mockNfc, type MemberInfo } from '@/mock/hardware'
-import { MOCK_ADMIN_PIN, MOCK_MEMBER_PIN } from '@/mock/data'
+
+// PR-11 (2026-08-15) / F-06: MOCK_ADMIN_PIN/MOCK_MEMBER_PIN 删除,PIN 校验下沉到主进程 (首次启动 SecureRandom 生成,落盘 userData/kiosk-pins.json)
+// 渲染层只负责收集 PIN 调 window.kioskBridge.verifyPin()
 
 import cardIllu from '@/assets/1.gif'
 import qrIllu from '@/assets/2.gif'
@@ -70,9 +72,11 @@ function openMemberPin(initialState: 'input' | 'error' | 'locked' = 'input') {
   showMemberPin.value = true
 }
 
-function onMemberConfirm() {
+async function onMemberConfirm() {
   if (memberPin.value.length < 4) return
-  if (memberPin.value === MOCK_MEMBER_PIN) {
+  // PR-11 (2026-08-15) / F-06: PIN 校验下沉到主进程 (主进程:常量时间比对 + 限流)
+  const result = await window.kioskBridge.verifyPin('member', memberPin.value)
+  if (result.ok) {
     showMemberPin.value = false
     pinState.value = 'input'
     router.push('/campaign')
@@ -130,9 +134,11 @@ function staffTap() {
   }
 }
 
-function onAdminConfirm() {
+async function onAdminConfirm() {
   if (adminPin.value.length < 6) return
-  if (adminPin.value === MOCK_ADMIN_PIN) {
+  // PR-11 (2026-08-15) / F-06: PIN 校验下沉到主进程
+  const result = await window.kioskBridge.verifyPin('admin', adminPin.value)
+  if (result.ok) {
     showAdmin.value = false
     adminPin.value = ''
     adminError.value = false
@@ -202,7 +208,7 @@ function backHome() {
           <img :src="qrIllu" alt="qr" />
         </div>
         <div class="m-name">{{ t('login.qr') }}</div>
-        <div class="m-hint" v-html="t('login.qrHint')"></div>
+        <div class="m-hint" v-dompurify-html="t('login.qrHint')"></div>
       </div>
 
       <div class="or">{{ t('common.or') }}</div>
@@ -227,7 +233,21 @@ function backHome() {
       <div class="device-tag">{{ t('login.deviceTag') }}</div>
 
       <button class="back-hint" @click="backHome">
-        <span class="arrow">‹</span>
+        <svg
+          data-pencil-name="BackIcon"
+          data-icon-name="chevron-left"
+          data-icon-set="feather"
+          viewBox="0 0 14 14"
+          preserveAspectRatio="xMidYMid meet"
+          xmlns="http://www.w3.org/2000/svg"
+          class="back-icon"
+          aria-hidden="true"
+        >
+          <path
+            d="M8.54492 2.82813q-0.06836 0.02734-0.41015 0.35546-0.3418 0.32813-1.51758 1.49024-0.7793 0.7793-1.3125 1.32617-0.5332 0.54688-0.56055 0.60156-0.04102 0.05469-0.05469 0.10938-0.01367 0.05469-0.01367 0.16406 0 0.10938 0.01367 0.16406 0.01367 0.05469 0.05469 0.10938 0.02734 0.05469 0.60156 0.64258 0.57422 0.58789 1.25782 1.27148 0.68359 0.68359 1.27148 1.24414 0.57422 0.57422 0.61523 0.58789 0.20508 0.10938 0.42383 0.03418 0.21875-0.07519 0.3418-0.2666 0.04102-0.06836 0.05469-0.12305 0.01367-0.05469 0.01367-0.16406 0-0.0957-0.01367-0.15723-0.01367-0.06152-0.02735-0.10254-0.02734-0.02734-0.49902-0.51953-0.47168-0.49219-1.12793-1.13476l-1.57227-1.58594 1.57227-1.58594q0.65625-0.64258 1.12793-1.13476 0.47168-0.49219 0.49902-0.51953 0.01367-0.04102 0.02735-0.10254 0.01367-0.06152 0.01367-0.15723 0-0.10938-0.01367-0.16406-0.01367-0.05469-0.05469-0.12305-0.08203-0.12305-0.21191-0.20508-0.12988-0.08203-0.29395-0.08203-0.05469 0-0.10937 0.00684-0.05469 0.00684-0.10938 0.0205l0.01367 0z"
+            fill="#8A650F"
+          />
+        </svg>
         <span class="label">{{ t('common.back') }}</span>
       </button>
 
@@ -244,7 +264,7 @@ function backHome() {
     <!-- 会员 PIN 弹窗（设计稿"输入密码2" — 距底部 1/5，叠加在登录页上） -->
     <div v-if="showMemberPin" class="pin-overlay" @click.self="closeMemberPin">
       <div class="pin-window">
-        <div class="pin-title" v-html="t('pin.memberTitle')"></div>
+        <div class="pin-title" v-dompurify-html="t('pin.memberTitle')"></div>
         <PinPad
           v-model="memberPin"
           :max-length="4"
@@ -352,7 +372,6 @@ function backHome() {
   margin-top: 18px;
   font-size: 20px;
   color: #C9A24D;
-  letter-spacing: 6px;
   font-weight: 500;
 }
 
@@ -369,13 +388,11 @@ function backHome() {
   font-weight: 800;
   color: var(--ink);
   line-height: 1.1;
-  letter-spacing: 2px;
 }
 .subtitle {
   margin-top: 28px;
   font-size: 32px;
   color: #2A2118;
-  letter-spacing: 2px;
 }
 
 /* 横向三卡 */
@@ -416,7 +433,6 @@ function backHome() {
   font-size: 32px;
   font-weight: 700;
   color: var(--ink);
-  letter-spacing: 2px;
 }
 .m-hint {
   font-size: 18px;
@@ -425,19 +441,18 @@ function backHome() {
   line-height: 1.5;
   min-height: 54px;
   white-space: pre-line;
-  letter-spacing: 1px;
 }
 .or {
   align-self: center;
   font-size: 18px;
   color: #C9A24D;
   padding: 0 4px;
-  letter-spacing: 2px;
   font-weight: 500;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  width:20px;
 }
 .or::before,
 .or::after {
@@ -471,16 +486,15 @@ function backHome() {
   gap: 8px;
   font-family: var(--font-cn);
   padding: 0;
-  letter-spacing: 1px;
 }
-.back-hint .arrow {
-  font-size: 40px;
-  line-height: 1;
+.back-icon {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
 }
 .device-tag {
   font-size: 11px;
   color: #c9a24d66;
-  letter-spacing: 1px;
 }
 
 /* 隐藏员工入口相关（保留原行为） */
@@ -566,7 +580,6 @@ function backHome() {
   font-weight: 700;
   color: var(--ink);
   text-align: center;
-  letter-spacing: 1px;
   line-height: 1.4;
 }
 
@@ -583,7 +596,6 @@ function backHome() {
   color: #9e1b2a;
   font-size: 36px;
   font-weight: 700;
-  letter-spacing: 1px;
 }
 .modal-icon {
   width: 120px;
@@ -608,7 +620,6 @@ function backHome() {
   font-size: 24px;
   color: var(--ink-soft);
   line-height: 1.6;
-  letter-spacing: 1px;
 }
 .modal-note {
   font-size: 22px;
@@ -648,7 +659,6 @@ function backHome() {
   font-size: 22px;
   font-weight: 700;
   color: var(--ink);
-  letter-spacing: 1px;
   line-height: 1.4;
 }
 .err {

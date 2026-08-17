@@ -202,7 +202,24 @@ onBeforeUnmount(() => {
               v-if="c.maxQty > 0"
               class="btn btn-primary cl-join"
               @click.stop="openQty(c)"
-            >{{ t('campaign.participate') }}</button>
+            >
+              <span>{{ t('campaign.participate') }}</span>
+              <svg
+                data-pencil-name="A"
+                data-icon-name="chevron-right"
+                data-icon-set="lucide"
+                viewBox="0 0 14 14"
+                preserveAspectRatio="xMidYMid meet"
+                xmlns="http://www.w3.org/2000/svg"
+                class="cl-join-icon"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                  fill="#FFFFFF"
+                />
+              </svg>
+            </button>
             <div v-else class="cl-soldout">{{ t('campaign.outOfStock') }}</div>
           </div>
         </div>
@@ -282,7 +299,7 @@ onBeforeUnmount(() => {
             </span>
           </div>
         </div>
-        <div class="redeem-warning" v-html="t('redeem.warning')"></div>
+        <div class="redeem-warning" v-dompurify-html="t('redeem.warning')"></div>
       </div>
       <template #footer>
         <button class="k-btn k-btn-ghost" @click="closePrintConfirm">
@@ -361,7 +378,7 @@ onBeforeUnmount(() => {
 }
 .greeting {
   position: absolute;
-  top: 150px;
+  top: 180px;
   left: 0;
   width: 1080px;
   text-align: center;
@@ -577,6 +594,7 @@ onBeforeUnmount(() => {
   line-height: 1.3;
 }
 .cl-desc {
+  display:none;
   font-size: 18px;
   color: var(--ink-soft);
   margin-top: 10px;
@@ -587,28 +605,27 @@ onBeforeUnmount(() => {
   position: absolute;
   background: #c9a24d;
   color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   left: 36px;
   bottom: 20px;
-  height: 68px;
-  padding: 0 40px;
-  font-size: 22px;
-  font-weight: 700;
-  flex-shrink: 0;
+  height: 62px;
+  box-size: border-box;
+  padding: 16px 28px;
+  font-size: 30px;
+  font-weight: 600;
   border: 1.5px solid #c9a24d;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(201, 162, 77, 0.25);
 }
-.cl-soldout {
-  position: absolute;
-  left: 36px;
-  bottom: 20px;
-  font-size: 22px;
-  color: var(--ink-soft);
-  padding: 16px 28px;
-  background: var(--cream-3);
-  border-radius: 12px;
+.cl-join-icon {
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
 }
+
 
 /* === 页面底部固定栏 (设计稿 03 Activity Scroll Hint + Skip Row) === */
 .bottom-bar {
@@ -686,8 +703,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   font-family: var(--font-cn);
   font-weight: 700;
-  font-size: 22px;
-  height: 68px;
   min-width: 220px;
   padding: 0 40px;
   transition: transform 0.08s, filter 0.15s;
@@ -935,9 +950,9 @@ onBeforeUnmount(() => {
         width: 100%;
     }
 }
-.k-dialog__footer {
-  gap: 24px;
-  padding: 0 0 8px;
+:deep(.k-dialog__footer) {
+  gap: 60px;
+  padding: 0 52px 8px;
 
   button {
     flex: 1;
