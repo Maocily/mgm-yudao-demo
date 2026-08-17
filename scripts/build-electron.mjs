@@ -10,7 +10,14 @@ const common = {
   format: 'cjs',
   external: ['electron'],
   outdir: 'dist-electron',
-  outExtension: { '.js': '.cjs' }
+  outExtension: { '.js': '.cjs' },
+  // PR-24 (CROSS-06 low): 显式开 minify,禁 sourcemap(避免泄漏源代码 + 注释到 dist-electron/)
+  minify: true,
+  sourcemap: false,
+  // 删 process.env.NODE_ENV / process.env.*.* 默认值 (electron 内置)
+  define: {
+    'process.env.NODE_ENV': '"production"'
+  }
 }
 
 await build({ ...common, entryPoints: ['electron/main.ts'] })

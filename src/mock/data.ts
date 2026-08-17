@@ -61,13 +61,8 @@ export const mockDevice = {
   paperRemain: 320,
   paperTotal: 600,
   /** 设计稿"更换打印纸"弹窗 — 纸张数量 1200 */
-  paperRefill: 1200,
+  paperRefill: 1000,
   version: 'v2.3.1 (build 20260612)',
   lastSync: '22:13:55',
   lastRestart: '2026-06-16 08:00:00'
 }
-
-/** 会员 PIN（Mock 校验用） */
-export const MOCK_MEMBER_PIN = '8888'
-/** 管理员 PIN（Mock 校验用；正规退出通道） */
-export const MOCK_ADMIN_PIN = '123456'
